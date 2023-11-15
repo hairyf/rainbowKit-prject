@@ -2,14 +2,45 @@ import { ConnectButton } from '@rainbow-me/rainbowkit'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import React from 'react'
-import { useTranslation } from 'react-i18next'
-import { Input } from '@nextui-org/react'
-import { useAccount } from 'wagmi'
+import useSWR from 'swr'
+import { Button, Image, Input } from '@nextui-org/react'
+import { useAccount, useContractRead, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi'
+import { useAsyncFn } from 'react-use'
+import { message } from 'antd'
 import styles from '../styles/Home.module.css'
 import { i18n } from '../plugins'
 import LocaleDropdown from '../components/LocaleDropdown'
+import { useTokenStore } from '../store/modules/token'
+import { TokenSelect } from '../components/TokenSelect'
+import { putPet } from '../apis'
+import { delay } from '../utils'
 
 const Home: NextPage = () => {
+  const { address } = useAccount()
+  const { token } = useTokenStore()
+  const [messageApi, contextHolder] = message.useMessage()
+
+  const { data: tokenBalance } = useContractRead({
+    address: '0xFBA3912Ca04dd458c843e2EE08967fC04f3579c2',
+    abi: [
+      {
+        inputs: [{ internalType: 'address', name: 'owner', type: 'address' }],
+        name: 'balanceOf',
+        outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+        stateMutability: 'view',
+        type: 'function',
+      },
+    ],
+    functionName: 'balanceOf',
+    args: [address || '0x'],
+    enabled: !!address,
+  })
+
+  const [state, doFetch] = useAsyncFn(async () => {
+    await delay(2000)
+    messageApi.success('Mitt Succeeded')
+  })
+
   return (
     <div lang="en" className="w-full">
       <Head>
@@ -20,10 +51,26 @@ const Home: NextPage = () => {
         />
         <link href="/favicon.ico" rel="icon" />
       </Head>
-      <LocaleDropdown />
+
+      {contextHolder}
 
       <main className={styles.main}>
-        <ConnectButton />
+        <div className="flex fixed top-10 right-10 gap-5">
+          <ConnectButton />
+          <LocaleDropdown />
+        </div>
+        <div className="mt-2 w-4/6 max-w-xl">
+          <div>
+            <span>Balance: </span>
+            {tokenBalance?.toString() || '0'}
+            <span>{` ${token}`}</span>
+          </div>
+          <div className="mt-2 flex w-full gap-5">
+            <Input className="flex-1" type="number" size="sm" />
+            <TokenSelect />
+          </div>
+          <Button type="submit" className="mt-5 w-full" onClick={() => doFetch()} isLoading={state.loading}>Mitt</Button>
+        </div>
       </main>
     </div>
   )

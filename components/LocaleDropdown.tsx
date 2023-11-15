@@ -13,7 +13,7 @@ function LocaleDropdown() {
   return (
     <Dropdown>
       <DropdownTrigger>
-        <Button className="fixed top-10 right-10" variant="bordered">
+        <Button variant="bordered">
           <IconLanguage />
           {t('config.name')}
         </Button>

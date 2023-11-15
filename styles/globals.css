@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html,
 body {
   padding: 0;
@@ -14,7 +18,14 @@ a {
 * {
   box-sizing: border-box;
 }
+input[type="number"] {
+  -moz-appearance: textfield; /* Firefox */
+  appearance: textfield;
+}
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none; /* Safari */
+  margin: 0;
+}
+
