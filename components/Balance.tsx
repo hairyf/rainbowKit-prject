@@ -1,5 +1,5 @@
 import { useAccount, useContractRead } from 'wagmi'
-import { useTokenStore } from '../store/modules/token'
+import { useTokenStore } from '../store'
 
 function Balance() {
   const { address } = useAccount()
