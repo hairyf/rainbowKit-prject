@@ -1,3 +1,11 @@
 {
+  "config": {
+    "lang": "fr",
+    "name": "Français"
+  },
+  "langs": {
+    "en": "English",
+    "fr": "Français"
+  },
   "Welcome to React": "Bienvenue à React et react-i18next"
 }

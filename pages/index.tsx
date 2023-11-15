@@ -3,12 +3,15 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { Input } from '@nextui-org/react'
+import { useAccount } from 'wagmi'
 import styles from '../styles/Home.module.css'
 import { i18n } from '../plugins'
+import LocaleDropdown from '../components/LocaleDropdown'
 
 const Home: NextPage = () => {
   return (
-    <div lang="en" className="dark">
+    <div lang="en" className="w-full">
       <Head>
         <title>RainbowKit App</title>
         <meta
@@ -17,6 +20,7 @@ const Home: NextPage = () => {
         />
         <link href="/favicon.ico" rel="icon" />
       </Head>
+      <LocaleDropdown />
 
       <main className={styles.main}>
         <ConnectButton />
